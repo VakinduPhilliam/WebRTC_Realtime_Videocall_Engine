@@ -1,0 +1,56 @@
+runtime: python27
+threadsafe: true
+api_version: 1
+
+handlers:
+- url: /(.*\.html)
+  static_files: html/\1
+  upload: html/(.*\.html)
+
+- url: /manifest.json
+  static_files: html/manifest.json
+  upload: html/manifest.json
+
+- url: /robots.txt
+  static_files: html/robot.txt
+  upload: html/robots.txt
+
+- url: /pako
+  static_dir: third_party/pako
+
+- url: /images
+  static_dir: images
+
+- url: /js
+  static_dir: js
+
+- url: /css
+  static_dir: css
+
+- url: /compute/.*
+  script: apprtc.app
+  login: admin
+
+- url: /probe.*
+  script: probers.app
+  secure: always
+
+- url: /.*
+  script: apprtc.app
+  secure: always
+
+libraries:
+- name: jinja2
+  version: latest
+- name: ssl
+  version: latest
+- name: pycrypto
+  version: latest
+
+env_variables:
+  BYPASS_JOIN_CONFIRMATION: false
+  # Only change these while developing, do not commit to source!
+  # Use appcfg.py --env_variable=ICE_SERVER_API_KEY:KEY \
+  # in order to replace variables when deploying.
+  ICE_SERVER_API_KEY: none
+  WITH_RTSTATS: none
